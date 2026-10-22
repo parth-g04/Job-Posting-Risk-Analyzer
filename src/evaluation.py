@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import (
     accuracy_score,
+    balanced_accuracy_score,
     precision_score,
     recall_score,
     f1_score,
@@ -18,21 +19,28 @@ from sklearn.metrics import (
 
 
 def compute_comprehensive_metrics(y_true, y_pred, y_prob=None) -> dict:
-    """Compute all standard and imbalanced classification metrics for binary fraud class."""
+    """Compute standard, balanced, and imbalanced metrics for binary fraud class."""
     cm = confusion_matrix(y_true, y_pred)
     tn, fp, fn, tp = cm.ravel()
+    total = len(y_true)
 
     metrics = {
         "accuracy": float(accuracy_score(y_true, y_pred)),
+        "balanced_accuracy": float(balanced_accuracy_score(y_true, y_pred)),
         "fraud_precision": float(precision_score(y_true, y_pred, pos_label=1, zero_division=0)),
         "fraud_recall": float(recall_score(y_true, y_pred, pos_label=1, zero_division=0)),
         "fraud_f1": float(f1_score(y_true, y_pred, pos_label=1, zero_division=0)),
         "macro_f1": float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
+        "false_positive_rate": float(fp / (fp + tn)) if (fp + tn) > 0 else 0.0,
         "confusion_matrix": {
             "tn": int(tn),
             "fp": int(fp),
             "fn": int(fn),
             "tp": int(tp),
+            "tn_pct": round(float(tn / total * 100), 2),
+            "fp_pct": round(float(fp / total * 100), 2),
+            "fn_pct": round(float(fn / total * 100), 2),
+            "tp_pct": round(float(tp / total * 100), 2),
             "raw": cm.tolist()
         }
     }

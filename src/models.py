@@ -6,6 +6,7 @@ Model definitions for the four classifiers:
 4. Random Forest
 All configured with class imbalance mitigation.
 """
+from sklearn.dummy import DummyClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
@@ -16,7 +17,8 @@ from .config import RANDOM_STATE
 
 def get_classifiers(random_state: int = RANDOM_STATE) -> dict:
     """
-    Returns a dictionary of uncalibrated or natively probability-capable classifiers.
+    Returns a dictionary of uncalibrated or natively probability-capable classifiers,
+    plus a Majority-Class Dummy baseline.
     LinearSVC is wrapped in CalibratedClassifierCV for probability output.
     """
     linear_svc = LinearSVC(
@@ -31,6 +33,9 @@ def get_classifiers(random_state: int = RANDOM_STATE) -> dict:
     )
 
     models = {
+        "Majority Class Baseline": DummyClassifier(
+            strategy="most_frequent"
+        ),
         "Multinomial Naive Bayes": MultinomialNB(
             alpha=0.1
         ),

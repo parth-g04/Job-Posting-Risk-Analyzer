@@ -19,7 +19,7 @@ This project provides an explainable machine learning screening system:
 * **Class Imbalance Mitigation**: Class prevalence is only **4.84%** ($\approx 19.6 : 1$ legitimate to fraud ratio). Models employ cost-sensitive learning (`class_weight='balanced'`) and are evaluated on **PR-AUC (Average Precision)**, **Recall**, and **F1-Score**.
 * **Zero Data Leakage Protocol**: Stratified 70/15/15 partitions; all vectorizers and encoders are fitted **strictly on the training split**.
 * **Dual-Layer Explainability**: Statistical feature log-odds weights are paired with domain heuristic rules (wire transfers, Telegram/WhatsApp communication, missing identity markers).
-* **Interactive 7-Tab Streamlit Web Application**: Complete exploratory data analysis, live scanner, custom CSV upload & independent EDA, benchmark dashboard, and error analysis.
+* **Interactive Web Applications**: A React risk-scanning interface backed by FastAPI, plus the original 7-tab Streamlit application for EDA, dataset uploads, benchmarks, and error analysis.
 
 ---
 
@@ -135,7 +135,23 @@ python generate_terminal_report.py
 ```
 *Prints the complete statistical summary directly into your console.*
 
-### E. Launch Interactive Streamlit Web Application
+### E. Launch the React Web Application
+```powershell
+# Install the Python API dependencies (if needed)
+pip install -r requirements.txt
+
+# Install and compile the React frontend
+cd frontend
+npm install
+npm run build
+cd ..
+
+# Serve the API and compiled frontend together
+uvicorn api:app --reload
+```
+Open **`http://localhost:8000`**. During frontend development, run `npm run dev` from `frontend/`; Vite proxies `/api` requests to the FastAPI server on port 8000.
+
+### F. Launch the Original Streamlit Application
 ```powershell
 streamlit run app.py --server.port 8502
 ```

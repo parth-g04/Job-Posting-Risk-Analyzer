@@ -1,0 +1,32 @@
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Large Datasets and Uploads
+data/raw/*.csv
+data/processed/*.csv
+data/uploads/*.csv
+!data/uploads/.gitkeep
+
+# Models and checkpoints (can be regenerated with train_evaluate.py)
+# models/*.joblib
+*.joblib.bak
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Task logs & temporary files
+*.log
+scratch/
